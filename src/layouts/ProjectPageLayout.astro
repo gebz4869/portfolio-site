@@ -46,7 +46,6 @@ const visibleContent = project.slug === 'ans-ein'
 >
 	<main class="project-page">
 		<header class="project-page__intro">
-			<h1>{project.title}</h1>
 			{openingHeading && <blockquote class="project-page__quote">{openingHeading.text}</blockquote>}
 			{introDescription && (
 				<p class="project-page__description">{introDescription}</p>
@@ -81,16 +80,6 @@ const visibleContent = project.slug === 'ans-ein'
 		text-align: left;
 	}
 
-	.project-page__intro h1 {
-		margin: 0;
-		font-family: var(--font-serif);
-		font-size: clamp(3rem, 6vw, 6rem);
-		font-weight: 400;
-		letter-spacing: -0.065em;
-		line-height: 0.98;
-		white-space: nowrap;
-	}
-
 	.project-page__quote {
 		margin: clamp(16px, 2.2vw, 24px) 0 0;
 		font-family: var(--font-serif);
@@ -112,10 +101,6 @@ const visibleContent = project.slug === 'ans-ein'
 	@media (max-width: 700px) {
 		.project-page { padding-top: 8px; }
 		.project-page { --project-copy-gutter: 12px; }
-		.project-page__intro h1 {
-			font-size: clamp(2.5rem, 10vw, 4rem);
-			white-space: normal;
-		}
 		.project-page__description { font-size: 14px; }
 	}
 </style>
