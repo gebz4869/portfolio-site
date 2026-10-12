@@ -5,9 +5,13 @@ type Props = {
 	blocks: ProjectContentBlock[];
 	projectTitle: string;
 	nested?: boolean;
+	leftAligned?: boolean;
 };
 
-const { blocks, projectTitle, nested = false } = Astro.props;
+const { blocks, projectTitle, nested = false, leftAligned = false } = Astro.props;
+const graduationIndex = blocks.findIndex(
+	(block) => block.type === 'heading' && block.text.trim().toLowerCase() === 'graduation',
+);
 ---
 
 {blocks.length > 0 && (
@@ -15,8 +19,10 @@ const { blocks, projectTitle, nested = false } = Astro.props;
 		class:list={['photography-gallery', nested && 'photography-gallery--nested']}
 		aria-label={!nested ? `${projectTitle} photography gallery` : undefined}
 	>
-		{blocks.map((block, index) => (
-			<div class:list={['photography-gallery__block', `photography-gallery__block--${block.type}`]}>
+		{blocks.map((block, index) => {
+			const blockIsLeftAligned = leftAligned || (graduationIndex >= 0 && index >= graduationIndex);
+			return (
+			<div class:list={['photography-gallery__block', `photography-gallery__block--${block.type}`, blockIsLeftAligned && 'photography-gallery__block--left-aligned']}>
 				{block.type === 'image' && (
 					<figure class="photography-gallery__item">
 						<img
@@ -50,7 +56,7 @@ const { blocks, projectTitle, nested = false } = Astro.props;
 					>
 						{block.columns.map((column) => (
 							<div class="photography-gallery__column">
-								<Astro.self blocks={column} projectTitle={projectTitle} nested />
+								<Astro.self blocks={column} projectTitle={projectTitle} nested leftAligned={blockIsLeftAligned} />
 							</div>
 						))}
 					</div>
@@ -61,7 +67,8 @@ const { blocks, projectTitle, nested = false } = Astro.props;
 				{block.type === 'heading' && block.level === 3 && <h4 class="photography-gallery__heading photography-gallery__heading--minor">{block.text}</h4>}
 				{block.type === 'paragraph' && <p class="photography-gallery__paragraph">{block.text}</p>}
 			</div>
-		))}
+			);
+		})}
 	</div>
 )}
 
@@ -136,6 +143,15 @@ const { blocks, projectTitle, nested = false } = Astro.props;
 		font-size: 14px;
 		line-height: 1.7;
 		white-space: pre-wrap;
+	}
+
+	@media (min-width: 701px) {
+		.photography-gallery__block--left-aligned.photography-gallery__block--heading,
+		.photography-gallery__block--left-aligned.photography-gallery__block--paragraph {
+			width: 100%;
+			margin-inline: 0;
+			padding-inline: 0;
+		}
 	}
 
 	@media (max-width: 700px) {

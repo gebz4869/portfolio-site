@@ -19,13 +19,15 @@ const selectedProjects = [
 <BaseLayout title="Portfolio — EG Graphic Design" description="Selected graphic design, editorial, campaign, and photography work by EG.">
 	<main class="landing-page">
 		<section class="landing-intro" aria-labelledby="intro-title">
-			<div class="landing-intro__heading">
+			<div class="landing-intro__row">
 				<img class="landing-intro__mark" src="/favicon.svg" alt="EG personal logo" />
-				<h1 id="intro-title">Welcome to my Portfolio!</h1>
+				<div class="landing-intro__copy">
+					<h1 id="intro-title">Welcome to my Portfolio!</h1>
+					<p class="landing-intro__description">
+						I’m a graphic designer working across brand identity, editorial, and digital content. I enjoy turning ideas into clear, thoughtful visual experiences.
+					</p>
+				</div>
 			</div>
-			<p class="landing-intro__description">
-				I’m a graphic designer working across brand identity, editorial, and digital content. I enjoy turning ideas into clear, thoughtful visual experiences.
-			</p>
 		</section>
 
 		<section class="project-collage" aria-label="Selected portfolio projects">
@@ -78,18 +80,20 @@ const selectedProjects = [
 		padding: clamp(20px, 2vw, 28px) 0 clamp(44px, 5vw, 64px);
 	}
 
-	.landing-intro__heading {
-		display: flex;
+	.landing-intro__row {
+		display: grid;
+		grid-template-columns: clamp(130px, 18vw, 185px) minmax(0, 1fr);
 		align-items: center;
-		gap: clamp(16px, 2.4vw, 32px);
+		gap: clamp(28px, 3.2vw, 44px);
 	}
 
 	.landing-intro__mark {
 		display: block;
-		flex: 0 0 clamp(56px, 6.2vw, 78px);
-		width: clamp(56px, 6.2vw, 78px);
+		width: 100%;
 		height: auto;
 	}
+
+	.landing-intro__copy { max-width: 920px; }
 
 	.landing-intro h1 {
 		margin: 0;
@@ -221,12 +225,13 @@ const selectedProjects = [
 		.landing-page { margin-bottom: 20px; padding: 22px 0; }
 
 		.landing-intro { margin-inline: 0; padding: 12px 0 40px; }
-		.landing-intro__heading {
+		.landing-intro__row {
 			display: grid;
 			grid-template-columns: clamp(50px, 16vw, 72px) minmax(0, 1fr);
 			align-items: stretch;
 			gap: clamp(12px, 4vw, 18px);
 		}
+		.landing-intro__copy { display: contents; }
 		.landing-intro__mark {
 			width: 100%;
 			height: 100%;
@@ -240,6 +245,7 @@ const selectedProjects = [
 		}
 
 		.landing-intro__description {
+			grid-column: 1 / -1;
 			max-width: 520px;
 			margin-top: 22px;
 			font-size: 0.94rem;
@@ -249,8 +255,7 @@ const selectedProjects = [
 		.project-collage { gap: 22px; }
 		.project-collage__row { grid-template-columns: 1fr; gap: 22px; }
 		.project-collage__row--lead { margin-left: 0; }
-		.project-collage__row--support .project-collage__item:nth-child(1) { width: 84%; }
-		.project-collage__row--support .project-collage__item:nth-child(3) { width: 84%; justify-self: end; }
+		.project-collage__row .project-collage__item { width: 100%; justify-self: stretch; }
 		.project-collage__overlay { background: rgb(20 20 20 / 62%); }
 		.project-collage__title { top: 16px; font-size: 1.15rem; }
 
