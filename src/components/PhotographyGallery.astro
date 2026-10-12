@@ -1,0 +1,152 @@
+---
+import type { ProjectContentBlock } from '../lib/project-types';
+
+type Props = {
+	blocks: ProjectContentBlock[];
+	projectTitle: string;
+	nested?: boolean;
+};
+
+const { blocks, projectTitle, nested = false } = Astro.props;
+---
+
+{blocks.length > 0 && (
+	<div
+		class:list={['photography-gallery', nested && 'photography-gallery--nested']}
+		aria-label={!nested ? `${projectTitle} photography gallery` : undefined}
+	>
+		{blocks.map((block, index) => (
+			<div class:list={['photography-gallery__block', `photography-gallery__block--${block.type}`]}>
+				{block.type === 'image' && (
+					<figure class="photography-gallery__item">
+						<img
+							src={block.image.src}
+							alt={block.image.alt || `${projectTitle} photograph ${index + 1}`}
+							loading={index < 2 ? 'eager' : 'lazy'}
+						/>
+						{block.image.caption && <figcaption>{block.image.caption}</figcaption>}
+					</figure>
+				)}
+
+				{block.type === 'image-row' && (
+					<div class="photography-gallery__image-row">
+						{block.images.map((image, imageIndex) => (
+							<figure class="photography-gallery__item">
+								<img
+									src={image.src}
+									alt={image.alt || `${projectTitle} photograph ${index + imageIndex + 1}`}
+									loading="lazy"
+								/>
+								{image.caption && <figcaption>{image.caption}</figcaption>}
+							</figure>
+						))}
+					</div>
+				)}
+
+				{block.type === 'columns' && (
+					<div
+						class:list={['photography-gallery__columns', block.columns.length > 2 && 'photography-gallery__columns--wide']}
+						style={`--column-count: ${block.columns.length}`}
+					>
+						{block.columns.map((column) => (
+							<div class="photography-gallery__column">
+								<Astro.self blocks={column} projectTitle={projectTitle} nested />
+							</div>
+						))}
+					</div>
+				)}
+
+				{block.type === 'heading' && block.level === 1 && <h2 class="photography-gallery__heading">{block.text}</h2>}
+				{block.type === 'heading' && block.level === 2 && <h3 class="photography-gallery__heading photography-gallery__heading--sub">{block.text}</h3>}
+				{block.type === 'heading' && block.level === 3 && <h4 class="photography-gallery__heading photography-gallery__heading--minor">{block.text}</h4>}
+				{block.type === 'paragraph' && <p class="photography-gallery__paragraph">{block.text}</p>}
+			</div>
+		))}
+	</div>
+)}
+
+<style>
+	.photography-gallery {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: start;
+		gap: clamp(12px, 2vw, 24px);
+		margin-top: clamp(18px, 2.5vw, 34px);
+	}
+
+	.photography-gallery--nested {
+		display: flex;
+		flex-direction: column;
+		gap: clamp(12px, 2vw, 24px);
+		margin-top: 0;
+	}
+
+	.photography-gallery__block { min-width: 0; }
+	.photography-gallery__block--columns,
+	.photography-gallery__block--image-row,
+	.photography-gallery__block--image,
+	.photography-gallery__block--heading,
+	.photography-gallery__block--paragraph { grid-column: 1 / -1; }
+	.photography-gallery__block--heading,
+	.photography-gallery__block--paragraph {
+		width: min(100%, var(--project-copy-width, 820px));
+		margin-inline: auto;
+		padding-inline: var(--project-copy-gutter, clamp(0px, 2vw, 24px));
+	}
+	.photography-gallery--nested .photography-gallery__block { width: 100%; }
+
+	.photography-gallery__item { min-width: 0; margin: 0; }
+	.photography-gallery__item img { display: block; width: 100%; height: auto; background: #e8e6dc; }
+	.photography-gallery__item figcaption {
+		margin-top: 10px;
+		color: var(--color-muted);
+		font-size: 12px;
+		line-height: 1.5;
+	}
+
+	.photography-gallery__image-row,
+	.photography-gallery__columns {
+		display: grid;
+		grid-template-columns: repeat(var(--column-count, 2), minmax(0, 1fr));
+		align-items: start;
+		gap: clamp(10px, 2vw, 22px);
+	}
+
+	.photography-gallery__image-row { --column-count: 2; }
+	.photography-gallery__column { min-width: 0; }
+
+	.photography-gallery__block--heading:not(:first-child) { margin-top: clamp(16px, 2.5vw, 30px); }
+	.photography-gallery__heading {
+		margin: 0;
+		color: var(--color-ink);
+		font-family: var(--font-serif);
+		font-size: clamp(1.8rem, 3.3vw, 2.8rem);
+		font-weight: 400;
+		letter-spacing: -0.045em;
+		line-height: 1.08;
+		text-wrap: balance;
+	}
+
+	.photography-gallery__heading--sub { font-size: clamp(1.45rem, 2.6vw, 2.1rem); }
+	.photography-gallery__heading--minor { font-size: clamp(1.2rem, 2vw, 1.6rem); }
+
+	.photography-gallery__paragraph {
+		margin: 0;
+		color: var(--color-muted);
+		font-size: 14px;
+		line-height: 1.7;
+		white-space: pre-wrap;
+	}
+
+	@media (max-width: 700px) {
+		.photography-gallery { gap: 10px; }
+		.photography-gallery__columns--wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	}
+
+	@media (max-width: 540px) {
+		.photography-gallery { grid-template-columns: minmax(0, 1fr); }
+		.photography-gallery__columns,
+		.photography-gallery__columns--wide,
+		.photography-gallery__image-row { grid-template-columns: minmax(0, 1fr); }
+	}
+</style>

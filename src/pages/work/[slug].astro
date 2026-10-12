@@ -1,0 +1,30 @@
+---
+import ProjectPageLayout from '../../layouts/ProjectPageLayout.astro';
+import { projects } from '../../lib/projects';
+import { assertUniqueProjectSlugs } from '../../lib/project-slug.mjs';
+
+export function getStaticPaths() {
+	assertUniqueProjectSlugs(projects);
+	return projects.map((project) => ({
+		params: { slug: project.slug },
+		props: { project },
+	}));
+}
+
+const { project } = Astro.props;
+const disciplines = project.discipline.map((item) => item.toLowerCase());
+const workType = project.workType?.toLowerCase() ?? '';
+const layout = disciplines.includes('branding')
+	? 'branding'
+	: disciplines.includes('editorial')
+		? 'editorial'
+		: disciplines.some((item) => item.includes('social'))
+			? 'social'
+			: disciplines.includes('campaign') || workType === 'campaign'
+				? 'campaign'
+				: disciplines.includes('photography')
+					? 'photography'
+					: 'general';
+---
+
+<ProjectPageLayout project={project} layout={layout} />

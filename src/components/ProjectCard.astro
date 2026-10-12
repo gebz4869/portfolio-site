@@ -1,0 +1,115 @@
+---
+import type { Project } from '../lib/project-types';
+
+type Props = {
+	project: Project;
+	index: number;
+};
+
+const { project } = Astro.props;
+const category = project.discipline.join(' · ');
+const overlayName = project.client || project.title;
+---
+
+<article class="project-card">
+	<a class="project-card__link" href={`/work/${project.slug}/`} aria-label={`View ${project.title} project`}>
+		<div class="project-card__visual">
+			{project.cover ? (
+				<img class="project-card__image" src={project.cover} alt={project.description || `${project.title} cover`} />
+			) : (
+				<span class="project-card__placeholder-label">{project.title} · visual placeholder</span>
+			)}
+			<div class="project-card__overlay">
+				<p class="project-card__client">{overlayName}</p>
+				{category && <p class="project-card__category">{category}</p>}
+			</div>
+		</div>
+		<div class="project-card__caption">
+			<h3 class="project-card__title">{project.title}</h3>
+		</div>
+	</a>
+</article>
+
+<style>
+	.project-card__visual { isolation: isolate; }
+
+	.project-card__overlay {
+		position: absolute;
+		z-index: 1;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		gap: 6px;
+		padding: clamp(14px, 2vw, 24px);
+		text-align: center;
+		background: rgb(40 42 37 / 72%);
+		color: #f5f3ed;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 180ms ease, visibility 0s linear 180ms;
+	}
+
+	.project-card__client,
+	.project-card__category {
+		max-width: 100%;
+		margin: 0;
+		color: inherit;
+		line-height: 1.5;
+	}
+
+	.project-card__client {
+		font-size: clamp(1rem, 2.4vw, 1.65rem);
+		font-weight: 500;
+		letter-spacing: 0.01em;
+		text-wrap: balance;
+		overflow-wrap: anywhere;
+	}
+
+	.project-card__category {
+		font-size: 11px;
+		font-weight: 300;
+		letter-spacing: 0.08em;
+		opacity: 0.82;
+	}
+
+	.project-card__placeholder-label {
+		transition: opacity 180ms ease;
+	}
+
+	.project-card__title { margin-block: 0; }
+
+	@media (hover: hover) and (pointer: fine) {
+		.project-card:hover .project-card__overlay,
+	.project-card__link:focus-visible .project-card__overlay {
+			opacity: 1;
+			visibility: visible;
+			transition-delay: 0s;
+		}
+
+		.project-card:hover .project-card__placeholder-label,
+		.project-card__link:focus-visible .project-card__placeholder-label { opacity: 0; }
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		.project-card__overlay {
+			opacity: 1;
+			visibility: visible;
+			background: linear-gradient(
+				180deg,
+				rgb(40 42 37 / 70%) 0%,
+				rgb(40 42 37 / 8%) 48%,
+				rgb(40 42 37 / 72%) 100%
+			);
+			transition: none;
+		}
+	}
+
+	.project-card__link:focus-visible { outline: 2px solid var(--color-sage); outline-offset: 4px; }
+
+	@media (prefers-reduced-motion: reduce) {
+		.project-card__overlay,
+		.project-card__placeholder-label { transition: none; }
+	}
+</style>

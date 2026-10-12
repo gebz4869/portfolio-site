@@ -1,0 +1,70 @@
+---
+type VideoCard = {
+	title: string;
+	src: string;
+	poster?: string;
+};
+
+const videos: VideoCard[] = [
+	{ title: 'Product Launch', src: '/videos/ans-ein/product-launch.mp4' },
+	{ title: 'Mini Vlog', src: '/videos/ans-ein/mini-vlog.mp4' },
+	{ title: 'Product Demo', src: '/videos/ans-ein/product-demo.mp4' },
+];
+---
+
+<section class="ans-ein-videos" aria-label="Ans.Ein videos">
+	<div class="ans-ein-videos__grid">
+		{videos.map((video) => (
+			<article class="ans-ein-videos__card">
+				<h2 class="ans-ein-videos__title">{video.title}</h2>
+				<video controls preload="metadata" playsinline poster={video.poster}>
+					<source src={video.src} type="video/mp4" />
+					Your browser does not support HTML video.
+				</video>
+			</article>
+		))}
+	</div>
+</section>
+
+<style>
+	.ans-ein-videos {
+		margin-top: clamp(48px, 7vw, 96px);
+	}
+
+	.ans-ein-videos__grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		align-items: start;
+		gap: clamp(16px, 2.2vw, 32px);
+	}
+
+	.ans-ein-videos__card { min-width: 0; }
+
+	.ans-ein-videos__title {
+		min-height: 1.1em;
+		margin: 0 0 clamp(18px, 2vw, 28px);
+		font-family: var(--font-serif);
+		font-size: clamp(1.8rem, 3.2vw, 3.4rem);
+		font-weight: 400;
+		letter-spacing: -0.055em;
+		line-height: 1;
+		text-wrap: balance;
+	}
+
+	.ans-ein-videos__card video {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: var(--color-ink);
+	}
+
+	@media (max-width: 900px) {
+		.ans-ein-videos__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+		.ans-ein-videos__title { min-height: 2em; }
+	}
+
+	@media (max-width: 560px) {
+		.ans-ein-videos__grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+		.ans-ein-videos__title { min-height: 0; font-size: clamp(2rem, 9vw, 2.8rem); }
+	}
+</style>

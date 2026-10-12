@@ -1,0 +1,29 @@
+---
+type Props = {
+	projectHeader?: {
+		client?: string;
+		year?: number;
+	};
+};
+
+const { projectHeader } = Astro.props;
+const isProjectPage = projectHeader !== undefined;
+---
+
+
+<header class:list={['site-header', isProjectPage && 'site-header--project']}>
+	<a class="site-header__identity" href={isProjectPage ? '/#top' : '#top'} aria-label="Portfolio home">
+		{isProjectPage && (
+			<img class="site-header__mark" src="/favicon.svg" alt="" />
+		)}
+	</a>
+	{projectHeader && (
+		<div class="site-header__project-right">
+			<div class="site-header__project-meta">
+				{projectHeader.client && <span>{projectHeader.client}</span>}
+				{projectHeader.year && projectHeader.year > 0 && <span>{projectHeader.year}</span>}
+			</div>
+		</div>
+	)}
+</header>
+

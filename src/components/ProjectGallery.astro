@@ -1,0 +1,67 @@
+---
+import type { Project } from '../lib/project-types';
+
+type GalleryLayout = 'branding' | 'editorial' | 'social' | 'campaign' | 'photography' | 'general';
+
+type Props = {
+	project: Project;
+	layout: GalleryLayout;
+};
+
+const { project, layout } = Astro.props;
+const images = project.gallery?.length
+	? project.gallery
+	: project.cover
+		? [project.cover]
+		: [];
+---
+
+{images.length > 0 ? (
+	<div class:list={['project-gallery', `project-gallery--${layout}`]} aria-label={`${project.title} images`}>
+		{images.map((image, index) => (
+			<figure class="project-gallery__item">
+				<img src={image} alt={`${project.title} — image ${index + 1}`} loading={index === 0 ? 'eager' : 'lazy'} />
+			</figure>
+		))}
+	</div>
+) : (
+	<p class="project-gallery__empty">Project visuals have not been added yet.</p>
+)}
+
+<style>
+	.project-gallery {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: start;
+		gap: 16px;
+		margin-top: clamp(18px, 2.5vw, 34px);
+	}
+
+	.project-gallery__item { min-width: 0; margin: 0; background: #e8e6dc; }
+	.project-gallery__item img { display: block; width: 100%; height: auto; }
+
+	.project-gallery--editorial { grid-template-columns: minmax(0, 1fr); }
+	.project-gallery--social { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+	.project-gallery--branding .project-gallery__item:first-child,
+	.project-gallery--campaign .project-gallery__item:first-child { grid-column: 1 / -1; }
+	.project-gallery__item:only-child { grid-column: 1 / -1; }
+
+	.project-gallery__empty {
+		display: grid;
+		min-height: clamp(220px, 42vw, 620px);
+		margin: clamp(28px, 5vw, 64px) 0 0;
+		place-items: center;
+		background: #e8e6dc;
+		color: #72766a;
+		font-size: 12px;
+		letter-spacing: 0.08em;
+		text-align: center;
+		text-transform: uppercase;
+	}
+
+	@media (max-width: 700px) {
+		.project-gallery,
+		.project-gallery--social { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+		.project-gallery--editorial { grid-template-columns: minmax(0, 1fr); }
+	}
+</style>

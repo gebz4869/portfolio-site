@@ -6,8 +6,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+	"predev": "node scripts/clean-sidecars.mjs public src .astro && node --env-file-if-exists=.env.local scripts/sync-notion.mjs",
     "dev": "astro dev",
+	"prebuild": "node scripts/clean-sidecars.mjs public src .astro && node --env-file-if-exists=.env.local scripts/sync-notion.mjs",
     "build": "astro build",
+	"postbuild": "node scripts/clean-sidecars.mjs dist",
     "preview": "astro preview",
     "astro": "astro"
   },

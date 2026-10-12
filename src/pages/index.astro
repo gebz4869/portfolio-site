@@ -1,16 +1,274 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { projects } from '../lib/projects';
+
+// Keep the homepage selection varied and stable while reading live Notion data.
+const projectOrder = [
+	'Double Take Branding',
+	'RENEW Playbook',
+	'Ans.Ein',
+	'F***/FASH',
+	'Photography Works',
+];
+const selectedProjects = [
+	...projectOrder.flatMap((title) => projects.filter((project) => project.title === title && project.cover)),
+	...projects.filter((project) => project.cover && !projectOrder.includes(project.title)),
+].slice(0, 5);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Portfolio — EG Graphic Design" description="Selected graphic design, editorial, campaign, and photography work by EG.">
+	<main class="landing-page">
+		<section class="landing-intro" aria-labelledby="intro-title">
+			<div class="landing-intro__heading">
+				<img class="landing-intro__mark" src="/favicon.svg" alt="EG personal logo" />
+				<h1 id="intro-title">Welcome to my Portfolio!</h1>
+			</div>
+			<p class="landing-intro__description">
+				I’m a graphic designer working across brand identity, editorial, and digital content. I enjoy turning ideas into clear, thoughtful visual experiences.
+			</p>
+		</section>
+
+		<section class="project-collage" aria-label="Selected portfolio projects">
+			<div class="project-collage__row project-collage__row--lead">
+				{selectedProjects.slice(0, 2).map((project) => (
+					<a class="project-collage__item" href={`/work/${project.slug}/`} aria-label={`View ${project.title} project`}>
+						<img src={project.cover} alt={`${project.title} — ${project.discipline.join(', ')} project`} loading="eager" />
+						<span class="project-collage__overlay" aria-hidden="true">
+							<span class="project-collage__title">{project.title}</span>
+							{project.year && <span class="project-collage__year">{project.year}</span>}
+						</span>
+					</a>
+				))}
+			</div>
+			<div class="project-collage__row project-collage__row--support">
+				{selectedProjects.slice(2).map((project) => (
+					<a class="project-collage__item" href={`/work/${project.slug}/`} aria-label={`View ${project.title} project`}>
+						<img src={project.cover} alt={`${project.title} — ${project.discipline.join(', ')} project`} loading="lazy" />
+						<span class="project-collage__overlay" aria-hidden="true">
+							<span class="project-collage__title">{project.title}</span>
+							{project.year && <span class="project-collage__year">{project.year}</span>}
+						</span>
+					</a>
+				))}
+			</div>
+		</section>
+
+		<section class="landing-closing" aria-label="Closing quotation">
+			<blockquote>
+				<p>How <em>beautiful</em> are the feet of those who brings <em>good news.</em></p>
+				<cite>solideogloria</cite>
+			</blockquote>
+		</section>
+	</main>
+</BaseLayout>
+
+<style>
+	:global(.site-shell) { width: min(calc(100% - 48px), 1440px); }
+	:global(.site-header) { display: none; }
+
+	.landing-page {
+		--landing-ink: #282a25;
+		--landing-serif: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+		padding: clamp(32px, 4.4vw, 52px) 0;
+		color: var(--landing-ink);
+	}
+
+	.landing-intro {
+		margin-inline: clamp(42px, 10.5vw, 112px);
+		padding: clamp(20px, 2vw, 28px) 0 clamp(44px, 5vw, 64px);
+	}
+
+	.landing-intro__heading {
+		display: flex;
+		align-items: center;
+		gap: clamp(16px, 2.4vw, 32px);
+	}
+
+	.landing-intro__mark {
+		display: block;
+		flex: 0 0 clamp(56px, 6.2vw, 78px);
+		width: clamp(56px, 6.2vw, 78px);
+		height: auto;
+	}
+
+	.landing-intro h1 {
+		margin: 0;
+		font-family: var(--landing-serif);
+		font-size: clamp(2.9rem, 5.6vw, 4.65rem);
+		font-style: italic;
+		font-weight: 400;
+		letter-spacing: -0.075em;
+		line-height: 0.94;
+		text-wrap: balance;
+	}
+
+	.landing-intro__description {
+		max-width: 520px;
+		margin: clamp(22px, 2.5vw, 32px) 0 0;
+		font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+		line-height: 1.8;
+	}
+
+	.project-collage { display: grid; gap: clamp(16px, 2.2vw, 30px); }
+
+	.project-collage__row {
+		display: grid;
+		align-items: start;
+		gap: clamp(14px, 2vw, 28px);
+	}
+
+	.project-collage__row--lead { grid-template-columns: 1fr 1fr; }
+	.project-collage__row--support { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+	.project-collage__item {
+		position: relative;
+		display: block;
+		min-width: 0;
+		overflow: hidden;
+		line-height: 0;
+	}
+
+	.project-collage__item img {
+		display: block;
+		width: 100%;
+		height: auto;
+		background: #efede7;
+	}
+
+	.project-collage__overlay {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+		background: rgb(20 20 20 / 72%);
+		color: #fff;
+		line-height: 1.4;
+		opacity: 0;
+		transition: opacity 180ms ease;
+	}
+
+	.project-collage__title,
+.project-collage__year {
+    position: absolute;
+    left: 50%;
+    width: calc(100% - 32px);
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+
+.project-collage__title {
+    top: 45%;
+    font-family: var(--landing-serif);
+    font-size: clamp(1.15rem, 2.2vw, 2rem);
+    text-wrap: balance;
+}
+
+.project-collage__year {
+    top: 55%;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+}
+
+	@media (hover: hover) and (pointer: fine) {
+		.project-collage__item:hover .project-collage__overlay { opacity: 1; }
+	}
+
+	.project-collage__item:focus-visible .project-collage__overlay,
+	.project-collage__item:active .project-collage__overlay { opacity: 1; }
+
+	.project-collage__item:focus-visible {
+		outline: 2px solid var(--landing-ink);
+		outline-offset: 5px;
+	}
+
+	.landing-closing {
+		display: grid;
+		min-height: clamp(300px, 35vw, 470px);
+		place-items: center;
+		padding: clamp(50px, 12vw, 170px) 4vw clamp(28px, 5vw, 68px);
+	}
+
+	.landing-closing blockquote {
+		width: min(100%, 700px);
+		margin: 0;
+		text-align: center;
+	}
+
+	.landing-closing blockquote p {
+		margin: 0;
+		font-family: var(--landing-serif);
+		font-size: clamp(0.5rem, 4.2vw, 1.5rem);
+		font-weight: 100;
+		letter-spacing: -0.045em;
+		line-height: 1.2;
+		text-wrap: balance;
+	}
+
+	.landing-closing em { font-style: italic; font-weight: 400; }
+
+	.landing-closing cite {
+		display: block;
+		margin-top: 30px;
+		font-family: var(--landing-serif);
+		font-size: clamp(1rem, 1.8vw, 1.35rem);
+		font-style: italic;
+		letter-spacing: -0.02em;
+		text-align: center;
+	}
+
+	@media (max-width: 760px) {
+		:global(.site-shell) { width: calc(100% - 40px); }
+		.landing-page { margin-bottom: 20px; padding: 22px 0; }
+
+		.landing-intro { margin-inline: 0; padding: 12px 0 40px; }
+		.landing-intro__heading {
+			display: grid;
+			grid-template-columns: clamp(50px, 16vw, 72px) minmax(0, 1fr);
+			align-items: stretch;
+			gap: clamp(12px, 4vw, 18px);
+		}
+		.landing-intro__mark {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+		}
+
+		.landing-intro h1 {
+			font-size: clamp(2.25rem, 8.4vw, 3rem);
+			letter-spacing: -0.07em;
+			line-height: 0.96;
+		}
+
+		.landing-intro__description {
+			max-width: 520px;
+			margin-top: 22px;
+			font-size: 0.94rem;
+			line-height: 1.72;
+		}
+
+		.project-collage { gap: 22px; }
+		.project-collage__row { grid-template-columns: 1fr; gap: 22px; }
+		.project-collage__row--lead { margin-left: 0; }
+		.project-collage__row--support .project-collage__item:nth-child(1) { width: 84%; }
+		.project-collage__row--support .project-collage__item:nth-child(3) { width: 84%; justify-self: end; }
+		.project-collage__overlay { background: rgb(20 20 20 / 62%); }
+		.project-collage__title { top: 16px; font-size: 1.15rem; }
+
+		.landing-closing {
+			min-height: 300px;
+			padding: 88px 0 24px;
+		}
+
+		.landing-closing blockquote p {
+			font-size: clamp(1.35rem, 5.5vw, 1.65rem);
+			line-height: 1.16;
+		}
+
+		.landing-closing cite { margin-top: 2px; }
+	}
+
+	@media (max-width: 380px) {
+		.landing-page { padding-block: 18px; }
+		.landing-intro h1 { font-size: clamp(2rem, 8.4vw, 2.5rem); }
+	}
+</style>

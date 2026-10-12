@@ -1,0 +1,172 @@
+---
+import type { ProjectContentBlock } from '../lib/project-types';
+
+type Props = {
+	blocks: ProjectContentBlock[];
+	projectTitle: string;
+};
+
+const { blocks, projectTitle } = Astro.props;
+---
+
+{blocks.length > 0 && (
+	<div class="project-content" aria-label={`${projectTitle} project content`}>
+		{blocks.map((block, index) => (
+			<div class:list={['project-content__block', `project-content__block--${block.type}`]}>
+				{block.type === 'columns' && (
+					<div
+						class:list={['project-content__columns', block.columns.length > 2 && 'project-content__columns--wide']}
+						style={`--column-count: ${block.columns.length}`}
+					>
+						{block.columns.map((column) => (
+							<div class="project-content__column">
+								<Astro.self blocks={column} projectTitle={projectTitle} />
+							</div>
+						))}
+					</div>
+				)}
+
+				{block.type === 'image' && (
+					<figure class="project-content__figure">
+						<img src={block.image.src} alt={block.image.alt || `${projectTitle} image ${index + 1}`} loading="lazy" />
+						{block.image.caption && <figcaption>{block.image.caption}</figcaption>}
+					</figure>
+				)}
+
+				{block.type === 'image-row' && (
+					<div class="project-content__row">
+						{block.images.map((image, imageIndex) => (
+							<figure class="project-content__figure">
+								<img src={image.src} alt={image.alt || `${projectTitle} image ${index + imageIndex + 1}`} loading="lazy" />
+								{image.caption && <figcaption>{image.caption}</figcaption>}
+							</figure>
+						))}
+					</div>
+				)}
+
+				{block.type === 'heading' && block.level === 1 && <h2 class="project-content__heading">{block.text}</h2>}
+				{block.type === 'heading' && block.level === 2 && <h3 class="project-content__heading">{block.text}</h3>}
+				{block.type === 'heading' && block.level === 3 && <h4 class="project-content__heading">{block.text}</h4>}
+				{block.type === 'paragraph' && <p class="project-content__paragraph">{block.text}</p>}
+
+				{block.type === 'video' && (
+					<div class="project-content__video">
+						{block.embedUrl ? (
+						<iframe
+							src={block.embedUrl}
+							title={block.title || `${projectTitle} video`}
+							loading="lazy"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							allowfullscreen
+							referrerpolicy="strict-origin-when-cross-origin"
+						></iframe>
+						) : (
+						<video controls playsinline preload="metadata" aria-label={block.title || `${projectTitle} video`}>
+							<source src={block.url} />
+						</video>
+						)}
+				</div>
+				)}
+
+				{block.type === 'link' && (
+					<p class="project-content__link">
+						<a href={block.url} target="_blank" rel="noreferrer">{block.label} <span aria-hidden="true">↗</span></a>
+					</p>
+				)}
+			</div>
+		))}
+	</div>
+)}
+
+<style>
+	.project-content {
+		display: grid;
+		gap: 0;
+		margin-top: clamp(18px, 2.5vw, 34px);
+	}
+
+	.project-content__block { min-width: 0; }
+	.project-content__block--image,
+	.project-content__block--image-row,
+	.project-content__block--columns,
+	.project-content__block--video { margin-bottom: clamp(28px, 4vw, 48px); }
+	.project-content__block--heading,
+	.project-content__block--paragraph,
+	.project-content__block--link {
+		width: min(100%, var(--project-copy-width, 820px));
+		margin-inline: auto;
+		padding-inline: var(--project-copy-gutter, clamp(0px, 2vw, 24px));
+	}
+	.project-content__block--heading { margin-bottom: 8px; }
+	.project-content__block--paragraph { margin-bottom: 18px; }
+	.project-content__block--link { margin-bottom: 24px; }
+	.project-content__figure { margin: 0; }
+	.project-content__figure img { display: block; width: 100%; height: auto; background: #e8e6dc; }
+	.project-content__figure figcaption {
+		margin-top: 10px;
+		color: var(--color-muted);
+		font-size: 12px;
+		line-height: 1.5;
+	}
+
+	.project-content__row {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		align-items: start;
+		gap: clamp(10px, 2vw, 22px);
+	}
+
+	.project-content__columns {
+		display: grid;
+		grid-template-columns: repeat(var(--column-count), minmax(0, 1fr));
+		align-items: start;
+		gap: clamp(10px, 2vw, 22px);
+	}
+
+	.project-content__column { min-width: 0; }
+	.project-content__columns .project-content { gap: 0; margin-top: 0; }
+
+	.project-content__heading {
+		margin: 0 0 14px;
+		color: var(--color-ink);
+		font-family: var(--font-serif);
+		font-size: clamp(1.8rem, 3.6vw, 3rem);
+		font-weight: 400;
+		letter-spacing: -0.04em;
+		line-height: 1.08;
+		text-wrap: balance;
+	}
+
+	.project-content__paragraph {
+		margin: 0;
+		color: var(--color-muted);
+		font-size: 15px;
+		line-height: 1.8;
+		white-space: pre-wrap;
+	}
+
+	.project-content__video { position: relative; aspect-ratio: 16 / 9; background: #e8e6dc; }
+	.project-content__video iframe,
+	.project-content__video video { display: block; width: 100%; height: 100%; border: 0; }
+	.project-content__video video { object-fit: contain; }
+
+	.project-content__link { margin: 0; }
+	.project-content__link a {
+		color: var(--color-ink);
+		font-size: 14px;
+		text-decoration-color: var(--color-sage);
+		text-underline-offset: 4px;
+	}
+	.project-content__link a:hover { color: var(--color-sage); }
+
+	@media (max-width: 700px) {
+		.project-content__row { gap: 10px; }
+		.project-content__paragraph { font-size: 14px; }
+		.project-content__columns--wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	}
+
+	@media (max-width: 560px) {
+		.project-content__row { grid-template-columns: minmax(0, 1fr); }
+		.project-content__columns { grid-template-columns: minmax(0, 1fr); }
+	}
+</style>

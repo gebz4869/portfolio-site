@@ -1,0 +1,121 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import AnsEinVideos from '../components/AnsEinVideos.astro';
+import ProjectContent from '../components/ProjectContent.astro';
+import PhotographyGallery from '../components/PhotographyGallery.astro';
+import type { Project, ProjectContentBlock } from '../lib/project-types';
+
+type GalleryLayout = 'branding' | 'editorial' | 'social' | 'campaign' | 'photography' | 'general';
+
+type Props = {
+	project: Project;
+	layout: GalleryLayout;
+};
+
+const { project, layout } = Astro.props;
+const discipline = project.discipline.join(' · ');
+const pageDescription = project.description || `${project.title}${discipline ? ` — ${discipline}` : ''}`;
+const content = project.content ?? [];
+function hasBlockType(blocks: ProjectContentBlock[], types: ProjectContentBlock['type'][]): boolean {
+	return blocks.some((block) =>
+		types.includes(block.type) ||
+		(block.type === 'columns' && block.columns.some((column) => hasBlockType(column, types))),
+	);
+}
+const hasPhotographyImages = hasBlockType(content, ['image', 'image-row']);
+const openingHeading = layout !== 'photography' && content[0]?.type === 'heading' && content[0].level === 3
+	? content[0]
+	: undefined;
+const openingParagraph = openingHeading && content[1]?.type === 'paragraph' ? content[1] : undefined;
+const introDescription = project.description || openingParagraph?.text;
+const introBlockCount = openingHeading ? 1 + Number(!project.description && Boolean(openingParagraph)) : 0;
+const pageContent = content.slice(introBlockCount);
+// Ans.Ein's video cards and their headings are maintained in code, so never
+// render Notion video blocks or their enclosing columns a second time.
+const visibleContent = project.slug === 'ans-ein'
+	? pageContent.filter((block) =>
+		block.type !== 'video' && !(block.type === 'columns' && block.columns.some((column) => hasBlockType(column, ['video']))),
+	)
+	: pageContent;
+---
+
+<BaseLayout
+	title={`${project.title} — Graphic Design`}
+	description={pageDescription}
+	projectHeader={{ client: project.client, year: project.year }}
+>
+	<main class="project-page">
+		<header class="project-page__intro">
+			<h1>{project.title}</h1>
+			{openingHeading && <blockquote class="project-page__quote">{openingHeading.text}</blockquote>}
+			{introDescription && (
+				<p class="project-page__description">{introDescription}</p>
+			)}
+		</header>
+
+		{layout === 'photography' ? (
+			hasPhotographyImages ? (
+				<PhotographyGallery blocks={visibleContent} projectTitle={project.title} />
+			) : (
+				visibleContent.length > 0 && <ProjectContent blocks={visibleContent} projectTitle={project.title} />
+			)
+		) : (
+			visibleContent.length > 0 && <ProjectContent blocks={visibleContent} projectTitle={project.title} />
+		)}
+
+		{project.slug === 'ans-ein' && <AnsEinVideos />}
+	</main>
+</BaseLayout>
+
+<style>
+	.project-page {
+		--project-copy-width: 820px;
+		--project-copy-gutter: clamp(0px, 2vw, 24px);
+		padding-block: 12px clamp(72px, 10vw, 120px);
+	}
+
+	.project-page__intro {
+		width: min(100%, var(--project-copy-width));
+		margin-inline: auto;
+		padding-inline: var(--project-copy-gutter);
+		text-align: left;
+	}
+
+	.project-page__intro h1 {
+		margin: 0;
+		font-family: var(--font-serif);
+		font-size: clamp(3rem, 6vw, 6rem);
+		font-weight: 400;
+		letter-spacing: -0.065em;
+		line-height: 0.98;
+		white-space: nowrap;
+	}
+
+	.project-page__quote {
+		margin: clamp(16px, 2.2vw, 24px) 0 0;
+		font-family: var(--font-serif);
+		font-size: clamp(1.35rem, 2.6vw, 2rem);
+		font-weight: 400;
+		letter-spacing: -0.035em;
+		line-height: 1.25;
+		text-align: left;
+	}
+
+	.project-page__description {
+		margin: clamp(14px, 2vw, 20px) 0 0;
+		color: var(--color-muted);
+		font-size: 15px;
+		line-height: 1.7;
+		text-align: left;
+	}
+
+	@media (max-width: 700px) {
+		.project-page { padding-top: 8px; }
+		.project-page { --project-copy-gutter: 12px; }
+		.project-page__intro h1 {
+			font-size: clamp(2.5rem, 10vw, 4rem);
+			white-space: normal;
+		}
+		.project-page__description { font-size: 14px; }
+	}
+</style>
