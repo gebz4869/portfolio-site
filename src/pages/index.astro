@@ -187,9 +187,9 @@ const selectedProjects = [
 
 	.landing-closing {
 		display: grid;
-		min-height: clamp(300px, 35vw, 470px);
+		min-height: clamp(220px, 26vw, 350px);
 		place-items: center;
-		padding: clamp(37.5px, 9vw, 127.5px) 4vw clamp(21px, 3.75vw, 51px);
+		padding: clamp(18.75px, 4.5vw, 63.75px) 4vw clamp(10.5px, 1.875vw, 25.5px);
 	}
 
 	.landing-closing blockquote {
@@ -227,7 +227,7 @@ const selectedProjects = [
 		.landing-intro { margin-inline: 0; padding: 12px 0 40px; }
 		.landing-intro__row {
 			display: grid;
-			grid-template-columns: clamp(56px, 17vw, 78px) minmax(0, 1fr);
+			grid-template-columns: clamp(68px, 19vw, 92px) minmax(0, 1fr);
 			align-items: stretch;
 			gap: clamp(12px, 4vw, 18px);
 		}
@@ -239,7 +239,7 @@ const selectedProjects = [
 		}
 
 		.landing-intro h1 {
-			font-size: clamp(2.4rem, 8.8vw, 3.1rem);
+			font-size: clamp(2.7rem, 10vw, 3.5rem);
 			letter-spacing: -0.07em;
 			line-height: 0.96;
 		}
@@ -260,8 +260,8 @@ const selectedProjects = [
 		.project-collage__title { top: 16px; font-size: 1.15rem; }
 
 		.landing-closing {
-			min-height: 300px;
-			padding: 66px 0 18px;
+			min-height: clamp(180px, 54vw, 240px);
+			padding: 33px 0 9px;
 		}
 
 		.landing-closing blockquote p {
@@ -274,6 +274,6 @@ const selectedProjects = [
 
 	@media (max-width: 380px) {
 		.landing-page { padding-block: 18px; }
-		.landing-intro h1 { font-size: clamp(2.2rem, 8.8vw, 2.7rem); }
+		.landing-intro h1 { font-size: clamp(2.45rem, 10vw, 2.9rem); }
 	}
 </style>
