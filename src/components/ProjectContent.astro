@@ -139,10 +139,10 @@ const { blocks, projectTitle } = Astro.props;
 		margin: 0 0 14px;
 		color: var(--color-ink);
 		font-family: var(--font-serif);
-		font-size: var(--type-h2-size);
+		font-size: var(--type-h3-size);
 		font-weight: var(--type-h2-weight);
 		letter-spacing: -0.04em;
-		line-height: var(--type-h2-line);
+		line-height: var(--type-h3-line);
 		text-wrap: balance;
 	}
 
@@ -155,7 +155,7 @@ const { blocks, projectTitle } = Astro.props;
 	.project-content__paragraph {
 		margin: 0;
 		color: var(--color-muted);
-		font-size: var(--type-body-size);
+		font-size: 24px;
 		line-height: var(--type-body-line);
 		white-space: pre-wrap;
 	}
@@ -191,6 +191,7 @@ const { blocks, projectTitle } = Astro.props;
 	@media (max-width: 700px) {
 		.project-content__row { gap: 10px; }
 		.project-content__columns--wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+		.project-content__paragraph { font-size: var(--type-body-size); }
 	}
 
 	@media (max-width: 560px) {

@@ -92,7 +92,10 @@ const selectedProjects = [
 		height: auto;
 	}
 
-	.landing-intro__copy { max-width: 920px; }
+	.landing-intro__copy {
+		width: min(100%, 1120px);
+		justify-self: center;
+	}
 
 	.landing-intro h1 {
 		margin: 0;
@@ -106,8 +109,8 @@ const selectedProjects = [
 	}
 
 	.landing-intro__description {
-		max-width: 520px;
-		margin: clamp(22px, 2.5vw, 32px) 0 0;
+		max-width: 860px;
+		margin: clamp(22px, 2.5vw, 32px) auto 0;
 		font-size: var(--type-body-size);
 		line-height: var(--type-body-line);
 	}
