@@ -97,19 +97,19 @@ const selectedProjects = [
 	.landing-intro h1 {
 		margin: 0;
 		font-family: var(--landing-serif);
-		font-size: clamp(2.9rem, 5.6vw, 4.65rem);
+		font-size: var(--type-h1-size);
 		font-style: italic;
-		font-weight: 400;
+		font-weight: var(--type-h1-weight);
 		letter-spacing: -0.075em;
-		line-height: 0.94;
+		line-height: var(--type-h1-line);
 		text-wrap: balance;
 	}
 
 	.landing-intro__description {
 		max-width: 520px;
 		margin: clamp(22px, 2.5vw, 32px) 0 0;
-		font-size: clamp(0.95rem, 1.15vw, 1.1rem);
-		line-height: 1.8;
+		font-size: var(--type-body-size);
+		line-height: var(--type-body-line);
 	}
 
 	.project-collage { display: grid; gap: clamp(16px, 2.2vw, 30px); }
@@ -162,13 +162,16 @@ const selectedProjects = [
 .project-collage__title {
     top: 45%;
     font-family: var(--landing-serif);
-    font-size: clamp(1.15rem, 2.2vw, 2rem);
+    font-size: var(--type-h3-size);
+    font-weight: var(--type-h3-weight);
+    line-height: var(--type-h3-line);
     text-wrap: balance;
 }
 
 .project-collage__year {
     top: 55%;
-    font-size: 1rem;
+    font-size: var(--type-caption-size);
+    line-height: var(--type-caption-line);
     letter-spacing: 0.1em;
 }
 
@@ -200,10 +203,10 @@ const selectedProjects = [
 	.landing-closing blockquote p {
 		margin: 0;
 		font-family: var(--landing-serif);
-		font-size: clamp(0.5rem, 4.2vw, 1.5rem);
-		font-weight: 100;
+    font-size: var(--type-h3-size);
+    font-weight: var(--type-h3-weight);
 		letter-spacing: -0.045em;
-		line-height: 1.2;
+    line-height: var(--type-h3-line);
 		text-wrap: balance;
 		white-space: nowrap;
 	}
@@ -229,17 +232,17 @@ const selectedProjects = [
 		}
 
 		.landing-intro h1 {
-			font-size: clamp(2.7rem, 10vw, 3.5rem);
+			font-size: var(--type-h1-size);
 			letter-spacing: -0.07em;
-			line-height: 0.96;
+			line-height: var(--type-h1-line);
 		}
 
 		.landing-intro__description {
 			grid-column: 1 / -1;
 			max-width: 520px;
 			margin-top: 22px;
-			font-size: 0.94rem;
-			line-height: 1.72;
+			font-size: var(--type-body-size);
+			line-height: var(--type-body-line);
 		}
 
 		.project-collage { gap: 22px; }
@@ -247,7 +250,7 @@ const selectedProjects = [
 		.project-collage__row--lead { margin-left: 0; }
 		.project-collage__row .project-collage__item { width: 100%; justify-self: stretch; }
 		.project-collage__overlay { background: rgb(20 20 20 / 62%); }
-		.project-collage__title { top: 16px; font-size: 1.15rem; }
+		.project-collage__title { top: 16px; font-size: var(--type-h3-size); line-height: var(--type-h3-line); }
 
 		.landing-closing {
 			min-height: 0;
@@ -255,14 +258,17 @@ const selectedProjects = [
 		}
 
 		.landing-closing blockquote p {
-			font-size: clamp(1.35rem, 5.5vw, 1.65rem);
-			line-height: 1.16;
+			font-size: var(--type-h3-size);
+			line-height: var(--type-h3-line);
 			white-space: normal;
 		}
 	}
 
+	@media (min-width: 761px) and (max-width: 1000px) {
+		.landing-closing blockquote p { white-space: normal; }
+	}
+
 	@media (max-width: 380px) {
 		.landing-page { padding-block: 18px; }
-		.landing-intro h1 { font-size: clamp(2.45rem, 10vw, 2.9rem); }
 	}
 </style>

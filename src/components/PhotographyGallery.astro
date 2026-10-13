@@ -107,8 +107,8 @@ const graduationIndex = blocks.findIndex(
 	.photography-gallery__item figcaption {
 		margin-top: 10px;
 		color: var(--color-muted);
-		font-size: 12px;
-		line-height: 1.5;
+		font-size: var(--type-caption-size);
+		line-height: var(--type-caption-line);
 	}
 
 	.photography-gallery__image-row,
@@ -127,21 +127,25 @@ const graduationIndex = blocks.findIndex(
 		margin: 0;
 		color: var(--color-ink);
 		font-family: var(--font-serif);
-		font-size: clamp(1.8rem, 3.3vw, 2.8rem);
-		font-weight: 400;
+		font-size: var(--type-h2-size);
+		font-weight: var(--type-h2-weight);
 		letter-spacing: -0.045em;
-		line-height: 1.08;
+		line-height: var(--type-h2-line);
 		text-wrap: balance;
 	}
 
-	.photography-gallery__heading--sub { font-size: clamp(1.45rem, 2.6vw, 2.1rem); }
-	.photography-gallery__heading--minor { font-size: clamp(1.2rem, 2vw, 1.6rem); }
+	.photography-gallery__heading--sub,
+	.photography-gallery__heading--minor {
+		font-size: var(--type-h3-size);
+		font-weight: var(--type-h3-weight);
+		line-height: var(--type-h3-line);
+	}
 
 	.photography-gallery__paragraph {
 		margin: 0;
 		color: var(--color-muted);
-		font-size: 14px;
-		line-height: 1.7;
+		font-size: var(--type-body-size);
+		line-height: var(--type-body-line);
 		white-space: pre-wrap;
 	}
 

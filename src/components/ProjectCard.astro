@@ -60,16 +60,18 @@ const overlayName = project.client || project.title;
 	}
 
 	.project-card__client {
-		font-size: clamp(1rem, 2.4vw, 1.65rem);
-		font-weight: 500;
+		font-size: var(--type-h3-size);
+		font-weight: var(--type-h3-weight);
+		line-height: var(--type-h3-line);
 		letter-spacing: 0.01em;
 		text-wrap: balance;
 		overflow-wrap: anywhere;
 	}
 
 	.project-card__category {
-		font-size: 11px;
-		font-weight: 300;
+		font-size: var(--type-caption-size);
+		font-weight: 400;
+		line-height: var(--type-caption-line);
 		letter-spacing: 0.08em;
 		opacity: 0.82;
 	}
