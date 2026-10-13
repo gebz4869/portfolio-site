@@ -70,7 +70,7 @@ const { blocks, projectTitle } = Astro.props;
 
 				{block.type === 'link' && (
 					<p class="project-content__link">
-						<a href={block.url} target="_blank" rel="noreferrer">{block.label} <span aria-hidden="true">↗</span></a>
+						<a href={block.url} target="_blank" rel="noopener noreferrer">{block.label} <span aria-hidden="true">↗</span></a>
 					</p>
 				)}
 			</div>

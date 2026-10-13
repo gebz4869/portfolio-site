@@ -16,6 +16,17 @@ const { project, layout } = Astro.props;
 const discipline = project.discipline.join(' · ');
 const pageDescription = project.description || `${project.title}${discipline ? ` — ${discipline}` : ''}`;
 const content = project.content ?? [];
+const linkedContent = project.slug === 'renew-playbook'
+	? content.some((block) => block.type === 'paragraph' && block.text === 'Link to RENEW Playbook site')
+		? content.map((block) =>
+			block.type === 'paragraph' && block.text === 'Link to RENEW Playbook site'
+				? { type: 'link' as const, url: 'https://ofw.sg/renew-playbooks/', label: block.text }
+				: block,
+		)
+		: [...content, { type: 'link' as const, url: 'https://ofw.sg/renew-playbooks/', label: 'Link to RENEW Playbook site' }]
+	: project.slug === 'double-take-branding'
+		? [...content, { type: 'link' as const, url: 'https://www.instagram.com/getadoubletake/', label: 'getadoubletake' }]
+		: content;
 function hasBlockType(blocks: ProjectContentBlock[], types: ProjectContentBlock['type'][]): boolean {
 	return blocks.some((block) =>
 		types.includes(block.type) ||
@@ -29,7 +40,7 @@ const openingHeading = layout !== 'photography' && content[0]?.type === 'heading
 const openingParagraph = openingHeading && content[1]?.type === 'paragraph' ? content[1] : undefined;
 const introDescription = project.description || openingParagraph?.text;
 const introBlockCount = openingHeading ? 1 + Number(!project.description && Boolean(openingParagraph)) : 0;
-const pageContent = content.slice(introBlockCount);
+const pageContent = linkedContent.slice(introBlockCount);
 // Ans.Ein's video cards and their headings are maintained in code, so never
 // render Notion video blocks or their enclosing columns a second time.
 const visibleContent = project.slug === 'ans-ein'
