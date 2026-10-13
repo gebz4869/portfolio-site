@@ -57,8 +57,7 @@ const selectedProjects = [
 
 		<section class="landing-closing" aria-label="Closing quotation">
 			<blockquote>
-				<p>How <em>beautiful</em> are the feet of those who brings <em>good news.</em></p>
-				<cite>solideogloria</cite>
+				<p>How <em>beautiful</em> are the feet of those<br />who brings <em>good news.</em> sdg</p>
 			</blockquote>
 		</section>
 	</main>
@@ -187,9 +186,9 @@ const selectedProjects = [
 
 	.landing-closing {
 		display: grid;
-		min-height: clamp(220px, 26vw, 350px);
+		min-height: clamp(150px, 17vw, 210px);
 		place-items: center;
-		padding: clamp(18.75px, 4.5vw, 63.75px) 4vw clamp(10.5px, 1.875vw, 25.5px);
+		padding: clamp(28px, 4vw, 42px) 4vw 8px;
 	}
 
 	.landing-closing blockquote {
@@ -209,16 +208,6 @@ const selectedProjects = [
 	}
 
 	.landing-closing em { font-style: italic; font-weight: 400; }
-
-	.landing-closing cite {
-		display: block;
-		margin-top: 30px;
-		font-family: var(--landing-serif);
-		font-size: clamp(1rem, 1.8vw, 1.35rem);
-		font-style: italic;
-		letter-spacing: -0.02em;
-		text-align: center;
-	}
 
 	@media (max-width: 760px) {
 		:global(.site-shell) { width: calc(100% - 40px); }
@@ -260,16 +249,14 @@ const selectedProjects = [
 		.project-collage__title { top: 16px; font-size: 1.15rem; }
 
 		.landing-closing {
-			min-height: clamp(180px, 54vw, 240px);
-			padding: 33px 0 9px;
+			min-height: 0;
+			padding: 30px 0 8px;
 		}
 
 		.landing-closing blockquote p {
 			font-size: clamp(1.35rem, 5.5vw, 1.65rem);
 			line-height: 1.16;
 		}
-
-		.landing-closing cite { margin-top: 2px; }
 	}
 
 	@media (max-width: 380px) {
