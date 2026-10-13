@@ -57,7 +57,7 @@ const selectedProjects = [
 
 		<section class="landing-closing" aria-label="Closing quotation">
 			<blockquote>
-				<p>How <em>beautiful</em> are the feet of those<br />who brings <em>good news.</em> sdg</p>
+				<p>How <em>beautiful</em> are the feet of those who brings <em>good news.</em> sdg</p>
 			</blockquote>
 		</section>
 	</main>
@@ -186,9 +186,9 @@ const selectedProjects = [
 
 	.landing-closing {
 		display: grid;
-		min-height: clamp(150px, 17vw, 210px);
+		min-height: 0;
 		place-items: center;
-		padding: clamp(28px, 4vw, 42px) 4vw 8px;
+		padding: clamp(16px, 2.5vw, 28px) 0 0;
 	}
 
 	.landing-closing blockquote {
@@ -205,6 +205,7 @@ const selectedProjects = [
 		letter-spacing: -0.045em;
 		line-height: 1.2;
 		text-wrap: balance;
+		white-space: nowrap;
 	}
 
 	.landing-closing em { font-style: italic; font-weight: 400; }
@@ -250,12 +251,13 @@ const selectedProjects = [
 
 		.landing-closing {
 			min-height: 0;
-			padding: 30px 0 8px;
+			padding: 20px 0 0;
 		}
 
 		.landing-closing blockquote p {
 			font-size: clamp(1.35rem, 5.5vw, 1.65rem);
 			line-height: 1.16;
+			white-space: normal;
 		}
 	}
 
